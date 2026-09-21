@@ -1,4 +1,3 @@
-export * from './BottomNav';
 export * from './BottomSheet';
 export * from './CompareMatrix';
 export * from './RadarChart';

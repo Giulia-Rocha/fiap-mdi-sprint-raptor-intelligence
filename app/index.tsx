@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,7 +9,7 @@ export default function SplashScreen() {
   const { colors, typography, spacing } = useTheme();
   const { token, isLoading } = useAuth();
   const router = useRouter();
-  const fadeAnim = new Animated.Value(0);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -17,7 +17,7 @@ export default function SplashScreen() {
       duration: 1000,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [fadeAnim]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -27,7 +27,7 @@ export default function SplashScreen() {
         router.replace('/login');
       }
     }
-  }, [isLoading, token]);
+  }, [isLoading, token, router]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.bgPrimary }]}>
