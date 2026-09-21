@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useVehicle } from '../../context/VehicleContext';
@@ -13,22 +13,17 @@ import { useRouter } from 'expo-router';
 
 export default function ProfileScreen() {
   const { colors, typography, spacing, radius } = useTheme();
-  const { currentSearchParams, comparisonList } = useVehicle();
+  const { currentSearchParams } = useVehicle();
   const [profile, setProfile] = useState<CustomerProfile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     setIsLoading(true);
     try {
       // Mock profile detection based on current state
       const data = await specsApi.detectProfile(
-        currentSearchParams || { brand: '', model: '', version: '', attributes: [] },
-        comparisonList[0]?.id || ''
+        currentSearchParams || { brand: '', model: '', version: '', attributes: [] }
       );
       setProfile(data);
     } catch (e) {
@@ -36,7 +31,11 @@ export default function ProfileScreen() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentSearchParams]);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   if (isLoading || !profile) {
     return (

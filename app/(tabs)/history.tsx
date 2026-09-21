@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
 export default function HistoryScreen() {
   const { colors, typography, spacing } = useTheme();
   const [history, setHistory] = useState<any[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
   const [filter, setFilter] = useState('all');
   const router = useRouter();
 
@@ -26,7 +26,7 @@ export default function HistoryScreen() {
     setFavorites(favs);
   };
 
-  const toggleFavorite = async (id: string) => {
+  const toggleFavorite = async (id: number) => {
     await storageService.toggleFavorite(id);
     loadData();
   };
@@ -89,7 +89,7 @@ export default function HistoryScreen() {
       ) : (
         <FlatList
           data={filteredHistory}
-          keyExtractor={(item, index) => `${item.id}-${index}`}
+          keyExtractor={(item) => String(item.id)}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
             <View style={styles.cardWrapper}>

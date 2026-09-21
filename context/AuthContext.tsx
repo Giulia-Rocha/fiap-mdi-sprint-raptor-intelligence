@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { specsApi } from '../services/specsApi';
+import { setAuthToken, setUnauthorizedHandler } from '../services/apiClient';
 
 interface AuthUser {
   name: string;
@@ -33,8 +34,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
       const storedUser = await SecureStore.getItemAsync(USER_KEY);
-      
+
       if (storedToken) {
+        setAuthToken(storedToken);
         setToken(storedToken);
       }
       if (storedUser) {
@@ -49,25 +51,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signIn = async (email: string, password: string) => {
     const data = await specsApi.login(email, password);
-    
+
     const userData: AuthUser = {
       name: data.name,
       dealership: data.dealership
     };
 
+    setAuthToken(data.token);
     await SecureStore.setItemAsync(TOKEN_KEY, data.token);
     await SecureStore.setItemAsync(USER_KEY, JSON.stringify(userData));
-    
+
     setToken(data.token);
     setUser(userData);
   };
 
   const signOut = async () => {
+    setAuthToken(null);
     await SecureStore.deleteItemAsync(TOKEN_KEY);
     await SecureStore.deleteItemAsync(USER_KEY);
     setToken(null);
     setUser(null);
   };
+
+  const signOutRef = useRef<() => Promise<void>>(signOut);
+  signOutRef.current = signOut;
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      void signOutRef.current();
+    });
+    return () => setUnauthorizedHandler(null);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ token, user, signIn, signOut, isLoading }}>

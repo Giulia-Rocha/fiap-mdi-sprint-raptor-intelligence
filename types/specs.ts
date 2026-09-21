@@ -20,7 +20,7 @@ export interface SpecField {
 }
 
 export interface TechnicalSheet {
-  vehicleId: string;
+  vehicleId: number;
   vehicle: Vehicle;
   specs: SpecField[];
   generatedAt: string;
@@ -38,10 +38,10 @@ export interface ComparisonRow {
   label: string;
   category: SpecCategory;
   values: (string | null)[];
-  winnerId: string | null;
+  winnerId: number | null;
 }
 
 export interface RadarScore {
-  vehicleId: string;
+  vehicleId: number;
   axes: RadarAxes;
 }

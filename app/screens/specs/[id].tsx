@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Share } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSpecs } from '../../../hooks/useSpecs';
@@ -7,7 +7,6 @@ import { useVehicle } from '../../../context/VehicleContext';
 import { SpecSection } from '../../../components/organisms/SpecSection';
 import { SpecRow } from '../../../components/molecules/SpecRow';
 import { SkeletonBar } from '../../../components/atoms/SkeletonBar';
-import { Badge } from '../../../components/atoms/Badge';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TechnicalSheet } from '../../../types/specs';
@@ -15,27 +14,34 @@ import { TechnicalSheet } from '../../../types/specs';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
+const escapeHtml = (text: string | null | undefined): string =>
+  String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
 export default function SpecsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { colors, typography, spacing, radius } = useTheme();
+  const { colors, typography, radius } = useTheme();
   const { getSpecs, isLoading } = useSpecs();
   const { addToComparison, isInComparison } = useVehicle();
   const router = useRouter();
 
   const [sheet, setSheet] = useState<TechnicalSheet | null>(null);
 
+  const loadData = useCallback(async () => {
+    const data = await getSpecs(Number(id));
+    if (data) {
+      setSheet(data);
+    }
+  }, [id, getSpecs]);
+
   useEffect(() => {
     if (id) {
       loadData();
     }
-  }, [id]);
-
-  const loadData = async () => {
-    const data = await getSpecs(id as string);
-    if (data) {
-      setSheet(data);
-    }
-  };
+  }, [id, loadData]);
 
   const handleShare = async () => {
     if (!sheet) return;
@@ -43,12 +49,12 @@ export default function SpecsScreen() {
       const html = `
         <html>
           <body style="font-family: sans-serif; padding: 20px;">
-            <h1 style="color: ${colors.accentBlue}">${sheet.vehicle.brand} ${sheet.vehicle.model}</h1>
-            <h2>${sheet.vehicle.version} (${sheet.vehicle.year})</h2>
+            <h1 style="color: ${colors.accentBlue}">${escapeHtml(sheet.vehicle.brand)} ${escapeHtml(sheet.vehicle.model)}</h1>
+            <h2>${escapeHtml(sheet.vehicle.version)} (${sheet.vehicle.year})</h2>
             <hr />
             ${sheet.specs.map(s => `
               <div style="margin-bottom: 10px;">
-                <b style="text-transform: capitalize;">${s.label}:</b> ${s.value} ${s.unit || ''}
+                <b style="text-transform: capitalize;">${escapeHtml(s.label)}:</b> ${escapeHtml(s.value)} ${escapeHtml(s.unit) || ''}
               </div>
             `).join('')}
           </body>

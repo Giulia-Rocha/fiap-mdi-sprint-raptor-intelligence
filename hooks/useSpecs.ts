@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { specsApi } from '../services/specsApi';
 import { TechnicalSheet } from '../types/specs';
 
@@ -9,11 +9,7 @@ export const useSpecs = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadBrands();
-  }, []);
-
-  const loadBrands = async () => {
+  const loadBrands = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await specsApi.getBrands();
@@ -23,47 +19,50 @@ export const useSpecs = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const loadModels = async (brand: string) => {
+  const loadModels = useCallback(async (brand: string) => {
     try {
       const data = await specsApi.getModels(brand);
       setModels(data);
     } catch (e) {
       setError('Erro ao carregar modelos');
     }
-  };
+  }, []);
 
-  const loadVersions = async (brand: string, model: string) => {
+  const loadVersions = useCallback(async (brand: string, model: string) => {
     try {
       const data = await specsApi.getVersions(brand, model);
       setVersions(data);
     } catch (e) {
       setError('Erro ao carregar versões');
     }
-  };
+  }, []);
 
-  const getSpecs = async (id: string): Promise<TechnicalSheet | null> => {
+  const getSpecs = useCallback(async (id: number): Promise<TechnicalSheet | null> => {
     setIsLoading(true);
     try {
-      const data = await specsApi.getVehicleSpecs(id);
-      return data;
+      return await specsApi.getVehicleSpecs(id);
     } catch (e) {
       setError('Erro ao carregar especificações');
       return null;
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const getVehicles = async () => {
+  const getVehicles = useCallback(async () => {
     try {
       return await specsApi.getVehicles();
     } catch (e) {
       setError('Erro ao carregar veículos');
       return [];
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadBrands();
+  }, [loadBrands]);
 
   return {
     brands,

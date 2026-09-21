@@ -20,3 +20,31 @@ export const setAuthToken = (token: string | null) => {
     delete apiClient.defaults.headers.common.Authorization;
   }
 };
+
+type UnauthorizedHandler = () => void;
+
+let unauthorizedHandler: UnauthorizedHandler | null = null;
+
+/**
+ * Registra o callback executado quando qualquer requisição autenticada
+ * recebe 401 (token expirado/inválido). Usado pelo AuthContext para
+ * efetuar logout automático. Apenas um handler por vez.
+ */
+export const setUnauthorizedHandler = (handler: UnauthorizedHandler | null) => {
+  unauthorizedHandler = handler;
+};
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.status === 401 &&
+      !error.config?.url?.includes('/auth/login')
+    ) {
+      setAuthToken(null);
+      unauthorizedHandler?.();
+    }
+    return Promise.reject(error);
+  }
+);

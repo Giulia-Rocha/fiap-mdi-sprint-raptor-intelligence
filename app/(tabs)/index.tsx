@@ -96,21 +96,18 @@ export default function HomeScreen() {
     // SPEC-002: Persist in context
     setSearchParams(params);
 
-    // SPEC-003: Find vehicle by params to get deterministic ID
+    // SPEC-003: Find vehicle by params to get the deterministic numeric ID (backend)
     const vehicles = await getVehicles();
     const vehicle = findVehicleByParams(vehicles, params);
 
-    const vehicleId = vehicle?.id || `${selectedBrand.toLowerCase()}-${selectedModel.toLowerCase()}-${selectedVersion.toLowerCase()}-2024`.replace(/\s+/g, '-');
+    if (!vehicle) {
+      Alert.alert('Veículo não encontrado', 'Não há um veículo cadastrado com a marca, modelo e versão selecionados.');
+      return;
+    }
+
+    storageService.saveSearch({ ...vehicle });
     
-    storageService.saveSearch({ 
-      id: vehicleId, 
-      brand: selectedBrand, 
-      model: selectedModel, 
-      version: selectedVersion, 
-      year: 2024 
-    });
-    
-    router.push(`/screens/specs/${vehicleId}`);
+    router.push(`/screens/specs/${vehicle.id}`);
   };
 
   const renderSheetContent = () => {
@@ -215,7 +212,7 @@ export default function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               data={history}
-              keyExtractor={(item, index) => `${item.id}-${index}`}
+              keyExtractor={(item) => String(item.id)}
               contentContainerStyle={{ paddingHorizontal: spacing.lg }}
               renderItem={({ item }) => (
                 <TouchableOpacity 

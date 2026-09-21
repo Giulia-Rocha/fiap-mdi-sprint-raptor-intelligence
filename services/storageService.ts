@@ -51,12 +51,12 @@ export const storageService = {
     }
   },
 
-  toggleFavorite: async (vehicleId: string) => {
+  toggleFavorite: async (vehicleId: number) => {
     try {
       const favorites = await storageService.getFavorites();
       const isFavorite = favorites.includes(vehicleId);
-      const updated = isFavorite 
-        ? favorites.filter((id: string) => id !== vehicleId)
+      const updated = isFavorite
+        ? favorites.filter((id: number) => id !== vehicleId)
         : [...favorites, vehicleId];
       await AsyncStorage.setItem(KEYS.FAVORITES, JSON.stringify(updated));
       return !isFavorite;
@@ -65,7 +65,7 @@ export const storageService = {
     }
   },
 
-  getFavorites: async () => {
+  getFavorites: async (): Promise<number[]> => {
     try {
       const data = await AsyncStorage.getItem(KEYS.FAVORITES);
       return data ? JSON.parse(data) : [];

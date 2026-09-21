@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useVehicle } from '../../context/VehicleContext';
@@ -10,6 +10,7 @@ import { ComparisonMatrix } from '../../types/specs';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { buildConclusion } from '../../utils/conclusion';
 
 export default function CompareScreen() {
   const { colors, typography, spacing, radius } = useTheme();
@@ -18,15 +19,7 @@ export default function CompareScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    if (comparisonList.length > 0) {
-      loadMatrix();
-    } else {
-      setMatrix(null);
-    }
-  }, [comparisonList]);
-
-  const loadMatrix = async () => {
+  const loadMatrix = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await specsApi.compareVehicles(comparisonList.map(v => v.id));
@@ -36,14 +29,22 @@ export default function CompareScreen() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [comparisonList]);
+
+  useEffect(() => {
+    if (comparisonList.length > 0) {
+      loadMatrix();
+    } else {
+      setMatrix(null);
+    }
+  }, [comparisonList, loadMatrix]);
 
   const handleSaveComparison = async () => {
     if (comparisonList.length < 2) return;
     try {
       await specsApi.saveComparison(
-        parseInt(comparisonList[0].id),
-        parseInt(comparisonList[1].id),
+        comparisonList[0].id,
+        comparisonList[1].id,
         `Comparativo entre ${comparisonList[0].model} e ${comparisonList[1].model}`
       );
       alert('Comparativo salvo com sucesso!');
@@ -167,9 +168,7 @@ export default function CompareScreen() {
                   <Text style={[typography.labelSm, { color: colors.accentBlue }]}>CONCLUSÃO COMPARATIVA</Text>
                 </View>
                 <Text style={[typography.bodyMd, { color: colors.textPrimary, lineHeight: 22 }]}>
-                  {matrix.vehicles[0]?.brand} {matrix.vehicles[0]?.model} destaca-se em capacidade Off-road e Tecnologia Embarcada. 
-                  Já o {matrix.vehicles[1]?.brand} {matrix.vehicles[1]?.model} possui vantagem em Performance bruta (0-100km/h) e Conforto. 
-                  Para clientes focados em aventuras extremas e custo-benefício, o modelo Ford Raptor é a escolha superior.
+                  {buildConclusion(matrix)}
                 </Text>
               </View>
             )}

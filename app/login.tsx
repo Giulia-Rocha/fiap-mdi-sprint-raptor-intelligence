@@ -104,10 +104,16 @@ export default function LoginScreen() {
           )}
 
           <TouchableOpacity 
-            style={[styles.primaryButton, { backgroundColor: colors.accentBlue, borderRadius: radius.md }]}
+            style={[
+              styles.primaryButton,
+              { backgroundColor: isLoading ? colors.bgElevated : colors.accentBlue, borderRadius: radius.md },
+            ]}
             onPress={handleLogin}
+            disabled={isLoading}
           >
-            <Text style={[typography.displayMd, { color: 'white' }]}>Entrar</Text>
+            <Text style={[typography.displayMd, { color: isLoading ? colors.textMuted : 'white' }]}>
+              {isLoading ? 'Entrando...' : 'Entrar'}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.linkButton} onPress={handleForgotPassword}>
