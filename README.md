@@ -64,13 +64,16 @@ O banco de dados e a API Java estão configurados para rodar juntos em container
    ```bash
    npm install
    ```
-3. **Conexão com a API (Opcional):**
-   O app inicia por padrão com Mocks (offline). Para usar a API real que você acabou de subir no Docker, crie um arquivo `.env` na raiz da pasta `raptor-mobile`:
+3. **Conexão com a API:**
+   Por padrão o app consome a **API Java real**. Configure o IP local da sua máquina na rede (para o celular físico alcançar o backend):
    ```env
    EXPO_PUBLIC_USE_MOCKS=false
    EXPO_PUBLIC_API_URL=http://<SEU_IP_LOCAL>:8080
+   EXPO_PUBLIC_DEV_EMAIL=admin@ford.com.br
+   EXPO_PUBLIC_DEV_PASSWORD=password
    ```
-   *(Dica: Use o seu IP local, ex: 192.168.x.x, para que o celular físico consiga encontrar o servidor).*
+   *(Dica: use o seu IP local, ex: 192.168.x.x — nunca `localhost` — para que o celular físico consiga encontrar o servidor. Credenciais de acesso dev: `admin@ford.com.br` / `password`.)*
+   > Defina `EXPO_PUBLIC_USE_MOCKS=true` apenas para modo offline/apresentação (dados de exemplo em `mocks/`).
 
 4. Inicie o projeto:
    ```bash

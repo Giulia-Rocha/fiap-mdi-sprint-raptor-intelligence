@@ -4,9 +4,11 @@
     "slug": "raptor-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
+    "scheme": "raptor",
+    "icon": "./assets/icon-1024.png",
     "splash": {
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#0A0F1E"
     },
@@ -15,14 +17,15 @@
       "bundleIdentifier": "com.ford.raptorintelligence"
     },
     "android": {
+      "package": "com.ford.raptorintelligence",
       "adaptiveIcon": {
-        
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0A0F1E"
-      },
-      "package": "com.ford.raptorintelligence"
+      }
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
@@ -31,6 +34,12 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "29bf2ee5-7ea1-4bbb-82aa-a6fe21f8d1ac"
+      }
     }
   }
 }
