@@ -7,6 +7,7 @@ import {
   adaptVehicleSummary,
   adaptVehicleDetail,
   adaptCompareResponse,
+  adaptCustomerProfile,
 } from '../utils/apiAdapters';
 import {
   delay,
@@ -119,8 +120,22 @@ export const specsApi = {
   },
 
   detectProfile: async (params: SearchParams): Promise<CustomerProfile> => {
-    // O backend não possui detecção de perfil; a heurística é local.
-    await delay(200);
-    return buildMockProfile(params);
+    if (USE_MOCKS) {
+      await delay(200);
+      return buildMockProfile(params);
+    }
+    try {
+      const response = await apiClient.post('/profiles/detect', {
+        brand: params.brand,
+        model: params.model,
+        version: params.version,
+        attributes: params.attributes || [],
+      });
+      return adaptCustomerProfile(response.data);
+    } catch (error) {
+      // Sem rede: usa a heurística local para não deixar a tela vazia.
+      console.warn('detectProfile falhou, usando heurística local', error);
+      return buildMockProfile(params);
+    }
   }
 };

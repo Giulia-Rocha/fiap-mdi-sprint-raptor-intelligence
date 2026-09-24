@@ -1,5 +1,6 @@
 import { Vehicle } from '../types/vehicle';
 import { TechnicalSheet, ComparisonMatrix, SpecField, SpecCategory } from '../types/specs';
+import { CustomerProfile } from '../types/profile';
 
 interface SpecMap {
   engine: { field: string; label: string; unit?: string }[];
@@ -212,3 +213,21 @@ export const adaptCompareResponse = (dto: any): ComparisonMatrix => {
 
   return { vehicles, rows, scores };
 };
+
+/**
+ * Converte o perfil do cliente retornado pela API (/profiles/detect, /profiles/{type})
+ * para o modelo interno do Mobile. O id numérico dos argumentos vira string, conforme
+ * o contrato tipado em types/profile.ts.
+ */
+export const adaptCustomerProfile = (dto: any): CustomerProfile => ({
+  type: dto.type,
+  label: dto.label,
+  description: dto.description,
+  detectedSignals: Array.isArray(dto.detectedSignals) ? dto.detectedSignals : [],
+  salesArguments: (dto.salesArguments || []).map((arg: any) => ({
+    id: String(arg.id),
+    title: arg.title,
+    description: arg.description,
+    urgency: arg.urgency,
+  })),
+});

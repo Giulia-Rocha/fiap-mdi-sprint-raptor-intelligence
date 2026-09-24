@@ -1,6 +1,6 @@
 import { Vehicle } from '../types/vehicle';
 import { TechnicalSheet, ComparisonMatrix, SpecField } from '../types/specs';
-import { CustomerProfile } from '../types/profile';
+import { CustomerProfile, CustomerProfileType } from '../types/profile';
 
 /**
  * Dados e funções de mock usados somente quando USE_MOCKS = true
@@ -61,17 +61,39 @@ export const buildMockMatrix = (): ComparisonMatrix => ({
   ],
 });
 
+const MODEL_PROFILES: Record<string, CustomerProfileType> = {
+  Ranger: 'enthusiast',
+  Shark: 'tech',
+  '1500': 'lifestyle',
+  Hilux: 'rational',
+};
+
+const PROFILE_META: Record<CustomerProfileType, { label: string; description: string }> = {
+  enthusiast: { label: 'Entusiasta Off-Road', description: 'Busca potência e capacidade fora-de-estrada.' },
+  lifestyle: { label: 'Lifestyle & Conforto', description: 'Prioriza conforto, design e família.' },
+  rational: { label: 'Racional (Custo-Benefício)', description: 'Focou em consumo, autonomia e manutenção.' },
+  tech: { label: 'Entusiasta de Tecnologia', description: 'Interessado em conectividade e assistentes.' },
+};
+
 export const buildMockProfile = (params: {
+  brand?: string;
+  model?: string;
+  version?: string;
   attributes: string[];
 }): CustomerProfile => {
   const isOffRoad = params.attributes.includes('offroad');
+  const type: CustomerProfileType = isOffRoad
+    ? 'enthusiast'
+    : MODEL_PROFILES[params.model ?? ''] ?? 'tech';
   return {
-    type: isOffRoad ? 'enthusiast' : 'tech',
-    label: isOffRoad ? 'Entusiasta' : 'Tecnológico',
-    description: 'Perfil detectado com base na busca.',
-    detectedSignals: [`Atributos: ${params.attributes.join(', ')}`],
+    type,
+    label: PROFILE_META[type].label,
+    description: PROFILE_META[type].description,
+    detectedSignals: params.attributes.length
+      ? [`Atributos: ${params.attributes.join(', ')}`]
+      : ['Busca realizada com foco nesse perfil.'],
     salesArguments: [
-      { id: '1', title: 'Argumento Ford', description: 'Vantagem competitiva Raptor.', urgency: 'high' },
+      { id: '1', title: 'Argumento Ford', description: 'Vantagem competitiva Raptor.', urgency: 'high' as const },
     ],
   };
 };

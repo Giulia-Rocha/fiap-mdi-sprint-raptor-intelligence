@@ -128,7 +128,7 @@ A boa notícia: o código é pequeno e as fronteiras são, em sua maioria, sensa
 - **Chaves de lista instáveis:** `keyExtractor={(item, index) => `${item.id}-${index}`}` (`index.tsx:218`, `history.tsx:92`) prejudica a virtualização/reconciliação. Usar `item.id` + `createdAt`.
 - **Falhas silenciosas:** `storageService` engole erros e retorna `null` (`services/storageService.ts:80,88`); sem alerta/telemetria.
 - **Modelo de favoritos frágil:** favoritos armazenam ids contra itens do histórico; itens que saem do histórico desaparecem do filtro "Favoritos", e não há toggle de favorito na tela de ficha.
-- **Features-stub apresentadas como reais:** `detectProfile` é lógica de mock local (`services/specsApi.ts:134-148`); o status da API em Configurações está hardcoded como "Operacional" (`settings.tsx:120`); "Alterar Senha"/"alterar foto" são stubs de `alert`.
+- **Features-stub apresentadas como reais:** ~~`detectProfile` é lógica de mock local~~ *(corrigido: `/profiles/detect` na API, com fallback offline)*; o status da API em Configurações está hardcoded como "Operacional" (`settings.tsx:120`); "Alterar Senha"/"alterar foto" são stubs de `alert`.
 
 ### P3
 - Dependências não utilizadas: `expo-notifications`, `expo-linking`, `@react-navigation/bottom-tabs` (apenas um type em código morto), provavelmente `expo-constants`. Por outro lado, não há biblioteca de fetch de dados/formulários.
