@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -29,6 +30,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   children,
 }) => {
   const { colors, radius, spacing, typography } = useTheme();
+  const insets = useSafeAreaInsets();
   const slideAnim = useRef(new Animated.Value(height)).current;
 
   useEffect(() => {
@@ -79,8 +81,13 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
               <Ionicons name="close" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
-          <ScrollView 
-            style={{ padding: spacing.lg }}
+          <ScrollView
+            contentContainerStyle={{
+              padding: spacing.lg,
+              // Espaço extra no fim da lista para não ficar sob a barra de
+              // navegação/taskbar do Android.
+              paddingBottom: insets.bottom + spacing.lg + 48,
+            }}
             showsVerticalScrollIndicator={false}
           >
             {children}
