@@ -1,14 +1,14 @@
-import { Vehicle, SearchParams } from '../types/vehicle';
-import { TechnicalSheet, ComparisonMatrix } from '../types/specs';
-import { CustomerProfile } from '../types/profile';
-import { USE_MOCKS } from '../config/env';
-import { apiClient } from './apiClient';
+import { Vehicle, SearchParams } from "../types/vehicle";
+import { TechnicalSheet, ComparisonMatrix } from "../types/specs";
+import { CustomerProfile } from "../types/profile";
+import { USE_MOCKS } from "../config/env";
+import { apiClient } from "./apiClient";
 import {
   adaptVehicleSummary,
   adaptVehicleDetail,
   adaptCompareResponse,
   adaptCustomerProfile,
-} from '../utils/apiAdapters';
+} from "../utils/apiAdapters";
 import {
   delay,
   MOCK_LOGIN,
@@ -19,7 +19,7 @@ import {
   buildMockSheet,
   buildMockMatrix,
   buildMockProfile,
-} from '../mocks/data';
+} from "../mocks/data";
 
 export const specsApi = {
   login: async (email: string, password: string): Promise<any> => {
@@ -27,7 +27,7 @@ export const specsApi = {
       await delay(800);
       return MOCK_LOGIN;
     }
-    const response = await apiClient.post('/auth/login', { email, password });
+    const response = await apiClient.post("/auth/login", { email, password });
     return response.data;
   },
 
@@ -36,7 +36,7 @@ export const specsApi = {
       await delay(300);
       return MOCK_VEHICLES;
     }
-    const response = await apiClient.get('/vehicles');
+    const response = await apiClient.get("/vehicles");
     return response.data.map(adaptVehicleSummary);
   },
 
@@ -45,7 +45,7 @@ export const specsApi = {
       await delay(500);
       return MOCK_BRANDS;
     }
-    const response = await apiClient.get('/brands');
+    const response = await apiClient.get("/brands");
     if (Array.isArray(response.data)) {
       return response.data.map((brand: any) => brand.name);
     }
@@ -58,11 +58,11 @@ export const specsApi = {
       return mockModels(brand);
     }
     // A API Java não tem /models isolado, então filtramos do /vehicles
-    const response = await apiClient.get('/vehicles');
+    const response = await apiClient.get("/vehicles");
     const vehicles = response.data as any[];
     const models = vehicles
-      .filter(vehicle => vehicle.brandName === brand)
-      .map(vehicle => vehicle.model);
+      .filter((vehicle) => vehicle.brandName === brand)
+      .map((vehicle) => vehicle.model);
     return Array.from(new Set(models));
   },
 
@@ -71,11 +71,13 @@ export const specsApi = {
       await delay(500);
       return mockVersions(brand, model);
     }
-    const response = await apiClient.get('/vehicles');
+    const response = await apiClient.get("/vehicles");
     const vehicles = response.data as any[];
     return vehicles
-      .filter(vehicle => vehicle.brandName === brand && vehicle.model === model)
-      .map(vehicle => vehicle.version);
+      .filter(
+        (vehicle) => vehicle.brandName === brand && vehicle.model === model,
+      )
+      .map((vehicle) => vehicle.version);
   },
 
   getVehicleSpecs: async (vehicleId: number): Promise<TechnicalSheet> => {
@@ -92,24 +94,28 @@ export const specsApi = {
       await delay(1200);
       return buildMockMatrix();
     }
-    const response = await apiClient.get('/compare', {
-      params: { ids: ids.join(',') }
+    const response = await apiClient.get("/compare", {
+      params: { ids: ids.join(",") },
     });
     return adaptCompareResponse(response.data);
   },
 
   getSavedComparisons: async (): Promise<any[]> => {
     if (USE_MOCKS) return [];
-    const response = await apiClient.get('/comparisons');
+    const response = await apiClient.get("/comparisons");
     return response.data;
   },
 
-  saveComparison: async (vehicleAId: number, vehicleBId: number, notes: string): Promise<any> => {
+  saveComparison: async (
+    vehicleAId: number,
+    vehicleBId: number,
+    notes: string,
+  ): Promise<any> => {
     if (USE_MOCKS) return { id: Date.now() };
-    const response = await apiClient.post('/comparisons', {
+    const response = await apiClient.post("/comparisons", {
       vehicleAId,
       vehicleBId,
-      notes
+      notes,
     });
     return response.data;
   },
@@ -125,7 +131,7 @@ export const specsApi = {
       return buildMockProfile(params);
     }
     try {
-      const response = await apiClient.post('/profiles/detect', {
+      const response = await apiClient.post("/profiles/detect", {
         brand: params.brand,
         model: params.model,
         version: params.version,
@@ -134,8 +140,8 @@ export const specsApi = {
       return adaptCustomerProfile(response.data);
     } catch (error) {
       // Sem rede: usa a heurística local para não deixar a tela vazia.
-      console.warn('detectProfile falhou, usando heurística local', error);
+      console.warn("detectProfile falhou, usando heurística local", error);
       return buildMockProfile(params);
     }
-  }
+  },
 };
