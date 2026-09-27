@@ -87,7 +87,7 @@ Abra o app **Expo Go** no seu celular e escaneie o QR Code que aparecerá no ter
  
 Além de rodar via Expo Go, o app também está disponível como build standalone (APK), gerado via **Expo EAS Build** e já configurado para consumir a API real em produção — não requer Expo Go nem configuração de ambiente.
  
-**[⬇️ Baixar APK](https://expo.dev/accounts/giulia-rocha/projects/raptor-mobile/builds/0a566d73-b65a-48d6-8d66-331be877fffe)**
+**[⬇️ Baixar APK](https://expo.dev/accounts/giulia-rocha/projects/raptor-mobile/builds/764fc61a-1592-4da6-aa5c-cdeae5e57174)**
  
 > Credenciais de acesso: `admin@ford.com.br` / `password`
  
