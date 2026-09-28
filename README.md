@@ -87,7 +87,7 @@ Abra o app **Expo Go** no seu celular e escaneie o QR Code que aparecerá no ter
  
 Além de rodar via Expo Go, o app também está disponível como build standalone (APK), gerado via **Expo EAS Build** e já configurado para consumir a API real em produção — não requer Expo Go nem configuração de ambiente.
  
-**[⬇️ Baixar APK](https://expo.dev/accounts/giulia-rocha/projects/raptor-mobile/builds/e5020273-5ade-47e5-ba9f-154a1f9302df)**
+**[⬇️ Baixar APK](https://expo.dev/accounts/giulia-rocha/projects/raptor-mobile/builds/764fc61a-1592-4da6-aa5c-cdeae5e57174)**
  
 > Credenciais de acesso: `admin@ford.com.br` / `password`
  
@@ -108,11 +108,12 @@ Além de rodar via Expo Go, o app também está disponível como build standalon
 | **Histórico de Buscas**<br>Registro das últimas consultas realizadas. | <img src="./assets/historico.jpeg" width="250" /> |
 | **Configurações**<br>Ajustes de preferências do aplicativo. | <img src="./assets/config.jpeg" width="250" /> |
 | **Buscas Favoritas**<br>Buscas favoritadas para maior agilidade. | <img src="./assets/fav.jpeg" width="250" /> |
+| **Perfil do Cliente**<br>Mostra o perfil do cliente com base nos carros escolhidos para o comparativo | <img src="./assets/perfil_cliente.jpeg" width="250" /> |
  
  
 ---
  
- ## [Video Demo](https://drive.google.com/file/d/1vDC0GxZa1u_w0UlMN6sTU9v11CjtXf-P/view?usp=drive_link)
+ ## [Video Demo](https://drive.google.com/file/d/1VFpbh9XbNUueDrhQQy1yUub9zUJGpHrp/view?usp=sharing)
  
 ## 🛠️ e) Decisões Técnicas
  
