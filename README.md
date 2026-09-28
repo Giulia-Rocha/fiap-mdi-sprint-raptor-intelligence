@@ -4,6 +4,7 @@ O **Raptor Mobile** é uma solução móvel desenvolvida para o desafio da Ford,
  
 ---
 # [Video Apresentação](https://drive.google.com/file/d/1eCSflt-YermQjY4nSCSUoE1Dt4EQv3fp/view?usp=sharing)
+> Este e um video de apresentação do projeto. O video do funciona esta em Video Demo mais abaixo no documento
  
 ## 📖 a) Sobre o Projeto
  
