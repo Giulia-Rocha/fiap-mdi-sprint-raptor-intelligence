@@ -9,7 +9,7 @@ O **Raptor Mobile** é uma solução móvel desenvolvida para o desafio da Ford,
 ## 📖 a) Sobre o Projeto
  
 ### O Desafio
-Escolhemos o desafio de **Digitalização da Jornada de Vendas**. No cenário atual, os consultores muitas vezes precisam se ausentar para consultar manuais ou sistemas de mesa, quebrando o ritmo da negociação. O Raptor Mobile resolve isso trazendo mobilidade e autoridade para o vendedor no pátio da concessionária.
+Escolhemos o Desafio 01 — Inteligência Competitiva Automotiva. Entender o valor percebido pelo cliente frente à concorrência exige dados precisos e organizados, e o mercado pede uma leitura rápida de como os veículos concorrentes se posicionam em preço e equipamentos. O Raptor Mobile recebe marca, modelo, versão e as categorias de atributos que o consultor quer pesquisar, e devolve uma ficha técnica sempre no mesmo formato, com campos comparáveis e dados ausentes sinalizados explicitamente (N/D). Usamos a Ford Ranger Raptor como veículo de referência.
  
 ### Por que Mobile?
 A mobilidade permite que o vendedor acompanhe o cliente durante todo o trajeto físico — desde a recepção até a inspeção do veículo no pátio — sem nunca perder o acesso aos dados que podem converter uma dúvida em fechamento.
