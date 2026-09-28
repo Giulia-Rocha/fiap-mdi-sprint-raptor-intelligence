@@ -108,11 +108,12 @@ Além de rodar via Expo Go, o app também está disponível como build standalon
 | **Histórico de Buscas**<br>Registro das últimas consultas realizadas. | <img src="./assets/historico.jpeg" width="250" /> |
 | **Configurações**<br>Ajustes de preferências do aplicativo. | <img src="./assets/config.jpeg" width="250" /> |
 | **Buscas Favoritas**<br>Buscas favoritadas para maior agilidade. | <img src="./assets/fav.jpeg" width="250" /> |
+| **Perfil do Cliente**<br>Mostra o perfil do cliente com base nos carros escolhidos para o comparativo | <img src="./assets/perfil_cliente.jpeg" width="250" /> |
  
  
 ---
  
- ## [Video Demo](https://drive.google.com/file/d/1vDC0GxZa1u_w0UlMN6sTU9v11CjtXf-P/view?usp=drive_link)
+ ## [Video Demo](https://drive.google.com/file/d/1VFpbh9XbNUueDrhQQy1yUub9zUJGpHrp/view?usp=sharing)
  
 ## 🛠️ e) Decisões Técnicas
  
